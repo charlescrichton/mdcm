@@ -35,3 +35,11 @@ Changes
 
 Your solution should now have "Solution 'DICOM' (2 projects)" at the top. 
 
+2. Allow Partially Trusted Callers 
+
+* Edit the following files to change the title, description, product, guid and 
+  add allow trusted callers attribute. 
+  * DICOM/Dicom/Properties/AssemblyInfo.cs 
+  * DICOM/Dicom.Linq/Properties/AssemblyInfo.cs 
+
+

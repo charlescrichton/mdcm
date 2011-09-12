@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("mDCM")]
-[assembly: AssemblyDescription("C# DICOM Library")]
+[assembly: AssemblyTitle("mDCM.SP.Sandbox")]
+[assembly: AssemblyDescription("C# DICOM Library - Modified for SharePoint Sandbox")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("mDCM")]
+[assembly: AssemblyProduct("mDCM.SP.Sandbox")]
 [assembly: AssemblyCopyright("Copyright © Colby Dillion 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,9 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9f048635-f464-4da1-8d65-1dc67296d0ff")]
-
+[assembly: Guid("DDAC0745-DE99-4199-9129-BAF17F26DB05")]
 
 [assembly: AssemblyVersion("0.9.6.0")]
+
+//Allow partially trusted callers - required in the SharePoint sandbox
+[assembly: System.Security.AllowPartiallyTrustedCallers()]
