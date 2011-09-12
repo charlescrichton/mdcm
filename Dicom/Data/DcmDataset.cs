@@ -1000,7 +1000,7 @@ namespace Dicom.Data {
 				return null;
 			}
 			catch (Exception) {
-				Debug.Log.Error("Error in default value type! - {0}", vtype.ToString());
+				//Debug.Log.Error("Error in default value type! - {0}", vtype.ToString());
 				return null;
 			}
 		}
@@ -1067,8 +1067,8 @@ namespace Dicom.Data {
 							field.SetValue(obj, LoadDicomFieldValue(elem, field.FieldType, dfa.DefaultValue, dfa.UseDefaultForZeroLength));
 						}
 					}
-					catch (Exception e) {
-						Debug.Log.Debug("Unable to bind field: " + e.Message);
+					catch (Exception) {
+						//Debug.Log.Debug("Unable to bind field: " + e.Message);
 					}
 				}
 			}
@@ -1085,8 +1085,8 @@ namespace Dicom.Data {
 							property.SetValue(obj, LoadDicomFieldValue(elem, property.PropertyType, dfa.DefaultValue, dfa.UseDefaultForZeroLength), null);
 						}
 					}
-					catch (Exception e) {
-						Debug.Log.Debug("Unable to bind field: " + e.Message);
+					catch (Exception) {
+						//Debug.Log.Debug("Unable to bind field: " + e.Message);
 					}
 				}
 			}

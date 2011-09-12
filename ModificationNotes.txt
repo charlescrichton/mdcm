@@ -49,3 +49,21 @@ In order not to clash with existing mDCM DLLs we modify the names produced.
 * Get the properties for the DICOM/Dicom project from the context menu (or Alt-Enter). 
 * Change the Assemby name to Dicom.SP.Sandbox 
 * Do the same for the DICOM/Dicom.Linq project with the Assemby name of Dicom.Linq.SP.Sandbox. 
+
+4. Remove Logging
+
+We don't want the logging code in the SharePoint sandbox solution as it causes all sorts of security headaches.
+
+* The easiest way is to build the solution. This will result in 7 errors. These are references to things we have removed. (The Logging code). 
+
+** To resolve these: 
+
+*** Error "The name 'Debug' does not exist in the current context" - Go to the code and comment out the line. Typically it will look like:
+
+    Debug.Log.Info("Codec: {0}", codec.GetName() + m);. 
+
+*** Error "The type or namespace name 'Debug' does not exist in the namespace 'Dicom' (are you missing an assembly reference?)" - Comment out the offending line as above. Typically it will be something like: 
+
+    Dicom.Debug.Log.Warn("Unknown error while attempting to read sequence item.  Trying again with alternate encodings.");
+
+

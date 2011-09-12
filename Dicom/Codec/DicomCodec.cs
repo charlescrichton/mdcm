@@ -138,7 +138,7 @@ namespace Dicom.Codec {
 					IDcmCodec codec = (IDcmCodec)Activator.CreateInstance(types[i]);
 					_codecs.Add(codec.GetTransferSyntax(), types[i]);
 					_codecNames.Add(codec.GetName() + m);
-					Debug.Log.Info("Codec: {0}", codec.GetName() + m);
+                    //Debug.Log.Info("Codec: {0}", codec.GetName() + m);
 				}
 			}
 		}

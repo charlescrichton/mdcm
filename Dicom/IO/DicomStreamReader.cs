@@ -245,7 +245,7 @@ namespace Dicom.IO {
 						if (_tag.Element != 0x0000 && _tag.Element <= 0x00ff) {
 							// handle UN private creator id
 							if (_vr != DicomVR.LO && Flags.IsSet(options, DicomReadOptions.ForcePrivateCreatorToLO)) {
-								Dicom.Debug.Log.Warn("Converting Private Creator VR from '{0}' to 'LO'", _vr.VR);
+								//Dicom.Debug.Log.Warn("Converting Private Creator VR from '{0}' to 'LO'", _vr.VR);
 								_vr = DicomVR.LO;
 							}
 						}
@@ -596,7 +596,7 @@ namespace Dicom.IO {
 						return DicomReadStatus.NeedMoreData;
 
 					if (status != DicomReadStatus.Success) {
-						Dicom.Debug.Log.Warn("Unknown error while attempting to read sequence item.  Trying again with alternate encodings.");
+						//Dicom.Debug.Log.Warn("Unknown error while attempting to read sequence item.  Trying again with alternate encodings.");
 
 						DicomTransferSyntax[] syntaxes = null;
 						if (TransferSyntax == DicomTransferSyntax.ExplicitVRBigEndian)
