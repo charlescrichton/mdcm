@@ -66,4 +66,13 @@ We don't want the logging code in the SharePoint sandbox solution as it causes a
 
     Dicom.Debug.Log.Warn("Unknown error while attempting to read sequence item.  Trying again with alternate encodings.");
 
+5. Workaround XML Error (hexadecimal value 0x00, is an invalid character)
 
+When some of our DICOM files are converted we get the following error:
+
+ XML Error, '.', hexadecimal value 0x00, is an invalid character
+
+To avoid this edit the DICOM/Dicom.Linq/Data/XDicom.cs file. 
+
+
+ 

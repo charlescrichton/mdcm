@@ -69,9 +69,15 @@ namespace Dicom.Data {
 					}
 				}
 				else {
-					DcmElement element = (DcmElement)item;
-					attr.SetAttributeValue("len", element.Length);
-					attr.Add(element.GetValueString());
+                    DcmElement element = (DcmElement)item;
+                    attr.SetAttributeValue("len", element.Length);
+                    {
+                        //Bug: '.', hexadecimal value 0x00, is an invalid character
+                        //See: http://forums.asp.net/t/1216196.aspx for given workaround.
+                        var elementValue = element.GetValueString();
+                        elementValue = System.Text.RegularExpressions.Regex.Replace(elementValue, "\\p{C}+", "");
+                        attr.Add(elementValue);
+                    }
 				}
 
 				if (Flags.IsSet(options, XDicomOptions.Comments))
