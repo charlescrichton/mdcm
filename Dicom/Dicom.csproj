@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dicom</RootNamespace>
-    <AssemblyName>Dicom</AssemblyName>
+    <AssemblyName>Dicom.SP.Sandbox</AssemblyName>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -59,7 +59,7 @@
     <DefineConstants>TRACE;DOTNET35 OPENSSL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Dicom.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Dicom.SP.Sandbox.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

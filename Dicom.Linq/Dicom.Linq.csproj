@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dicom.Linq</RootNamespace>
-    <AssemblyName>Dicom.Linq</AssemblyName>
+    <AssemblyName>Dicom.Linq.SP.Sandbox</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>

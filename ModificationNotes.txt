@@ -42,4 +42,10 @@ Your solution should now have "Solution 'DICOM' (2 projects)" at the top.
   * DICOM/Dicom/Properties/AssemblyInfo.cs 
   * DICOM/Dicom.Linq/Properties/AssemblyInfo.cs 
 
+3. Modify Assembly Names 
 
+In order not to clash with existing mDCM DLLs we modify the names produced.
+
+* Get the properties for the DICOM/Dicom project from the context menu (or Alt-Enter). 
+* Change the Assemby name to Dicom.SP.Sandbox 
+* Do the same for the DICOM/Dicom.Linq project with the Assemby name of Dicom.Linq.SP.Sandbox. 
