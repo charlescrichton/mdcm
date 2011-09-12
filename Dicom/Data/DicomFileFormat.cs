@@ -88,131 +88,220 @@ namespace Dicom.Data {
 			FileMetaInfo.TransferSyntax = ts;
 		}
 
-		/// <summary>
-		/// Gets the file meta information from a DICOM file
-		/// </summary>
-		/// <param name="file">Filename</param>
-		/// <returns>File meta information</returns>
-		public static DcmFileMetaInfo LoadFileMetaInfo(String file) {
-			using (FileStream fs = File.OpenRead(file)) {
-				fs.Seek(128, SeekOrigin.Begin);
-				CheckFileHeader(fs);
-				DicomStreamReader dsr = new DicomStreamReader(fs);
-				DcmFileMetaInfo metainfo = new DcmFileMetaInfo();
-				dsr.Dataset = metainfo;
-				dsr.Read(DcmFileMetaInfo.StopTag, DicomReadOptions.Default | DicomReadOptions.FileMetaInfoOnly);
-				fs.Close();
-				return metainfo;
-			}
-		}
+        /// <summary>
+        /// Gets the file meta information from a DICOM file
+        /// </summary>
+        /// <param name="file">Filename</param>
+        /// <returns>File meta information</returns>
+        public static DcmFileMetaInfo LoadFileMetaInfo(String file)
+        {
+            using (FileStream fs = File.OpenRead(file))
+            {
+                DcmFileMetaInfo metainfo = LoadFileMetaInfo(fs);
+                fs.Close();
+                return metainfo;
+            }
+        }
 
-		/// <summary>
-		/// Loads a dicom file
-		/// </summary>
-		/// <param name="file">Filename</param>
-		/// <param name="options">DICOM read options</param>
-		public DicomReadStatus Load(String file, DicomReadOptions options) {
-			return Load(file, null, options);
-		}
+        /// <summary>
+        /// Loads the meta information from a DICOM file in a stream.
+        /// Note that the caller is expected to dispose of the stream after usage.
+        /// </summary>
+        /// <param name="stream">The stream fontaining the DICOM file</param>
+        /// <returns>File meta information</returns>
+        public static DcmFileMetaInfo LoadFileMetaInfo(Stream stream)
+        {
+            stream.Seek(128, SeekOrigin.Begin);
+            CheckFileHeader(stream);
+            DicomStreamReader dsr = new DicomStreamReader(stream);
+            DcmFileMetaInfo metainfo = new DcmFileMetaInfo();
+            dsr.Dataset = metainfo;
+            dsr.Read(DcmFileMetaInfo.StopTag, DicomReadOptions.Default | DicomReadOptions.FileMetaInfoOnly);
+            return metainfo;
+        }
 
-		/// <summary>
-		/// Loads a dicom file, stopping at a certain tag
-		/// </summary>
-		/// <param name="file">Filename</param>
-		/// <param name="stopTag">Tag to stop parsing at</param>
-		/// <param name="options">DICOM read options</param>
-		public DicomReadStatus Load(String file, DicomTag stopTag, DicomReadOptions options) {
-			using (FileStream fs = File.OpenRead(file)) {
-				fs.Seek(128, SeekOrigin.Begin);
-				CheckFileHeader(fs);
-				DicomStreamReader dsr = new DicomStreamReader(fs);
+        /// <summary>
+        /// Loads a dicom file
+        /// </summary>
+        /// <param name="file">Filename</param>
+        /// <param name="options">DICOM read options</param>
+        public DicomReadStatus Load(String file, DicomReadOptions options)
+        {
+            return Load(file, null, options);
+        }
 
-				_metainfo = new DcmFileMetaInfo();
-				dsr.Dataset = _metainfo;
-				dsr.Read(DcmFileMetaInfo.StopTag, options | DicomReadOptions.FileMetaInfoOnly);
+        /// <summary>
+        /// Loads a dicom file from a stream
+        /// </summary>
+        /// <param name="stream">Stream</param>
+        /// <param name="options">DICOM read options</param>
+        public DicomReadStatus Load(Stream stream, DicomReadOptions options)
+        {
+            return Load(stream, null, options);
+        }
 
-				if (_metainfo.TransferSyntax.IsDeflate) {
-					MemoryStream ms = StreamUtility.Deflate(fs, false);
-					dsr = new DicomStreamReader(ms);
-				}
+        /// <summary>
+        /// Loads a dicom file, stopping at a certain tag
+        /// </summary>
+        /// <param name="file">Filename</param>
+        /// <param name="stopTag">Tag to stop parsing at</param>
+        /// <param name="options">DICOM read options</param>
+        public DicomReadStatus Load(String file, DicomTag stopTag, DicomReadOptions options)
+        {
+            using (FileStream fs = File.OpenRead(file))
+            {
+                DicomReadStatus status = Load(fs, stopTag, options);
 
-				_dataset = new DcmDataset(_metainfo.TransferSyntax);
-				dsr.Dataset = _dataset;
-				DicomReadStatus status = dsr.Read(stopTag, options);
+                fs.Close();
 
-				fs.Close();
+                return status;
+            }
+        }
 
-				return status;
-			}
-		}
+        /// <summary>
+        /// Loads a dicom file from a stream, stopping at a certain tag
+        /// </summary>
+        /// <param name="stream">Stream containing DICOM file</param>
+        /// <param name="stopTag">Tag to stop parsing at</param>
+        /// <param name="options">DICOM read options</param>
+        public DicomReadStatus Load(Stream stream, DicomTag stopTag, DicomReadOptions options)
+        {
+            stream.Seek(128, SeekOrigin.Begin);
+            CheckFileHeader(stream);
+            DicomStreamReader dsr = new DicomStreamReader(stream);
 
-		public static bool IsDicomFile(string file) {
-			bool isDicom = false;
-			using (FileStream fs = File.OpenRead(file)) {
-				fs.Seek(128, SeekOrigin.Begin);
-				if (fs.ReadByte() == (byte)'D' ||
-					fs.ReadByte() == (byte)'I' ||
-					fs.ReadByte() == (byte)'C' ||
-					fs.ReadByte() == (byte)'M')
-					isDicom = true;
-				fs.Close();
-			}
-			return isDicom;
-		}
+            _metainfo = new DcmFileMetaInfo();
+            dsr.Dataset = _metainfo;
+            dsr.Read(DcmFileMetaInfo.StopTag, options | DicomReadOptions.FileMetaInfoOnly);
 
-		private static void CheckFileHeader(FileStream fs) {
-			if (fs.ReadByte() != (byte)'D' ||
-				fs.ReadByte() != (byte)'I' ||
-				fs.ReadByte() != (byte)'C' ||
-				fs.ReadByte() != (byte)'M')
-				throw new DicomDataException("Invalid DICOM file: " + fs.Name);
-		}
+            if (_metainfo.TransferSyntax.IsDeflate)
+            {
+                MemoryStream ms = StreamUtility.Deflate(stream, false);
+                dsr = new DicomStreamReader(ms);
+            }
 
-		/// <summary>
-		/// Gets file stream starting at DICOM dataset
-		/// </summary>
-		/// <param name="file">Filename</param>
-		/// <returns>File stream</returns>
-		public static FileStream GetDatasetStream(String file) {
-			FileStream fs = File.OpenRead(file);
-			fs.Seek(128, SeekOrigin.Begin);
-			CheckFileHeader(fs);
-			DicomStreamReader dsr = new DicomStreamReader(fs);
-			DcmFileMetaInfo metainfo = new DcmFileMetaInfo();
-			dsr.Dataset = metainfo;
-			if (dsr.Read(DcmFileMetaInfo.StopTag, DicomReadOptions.Default | DicomReadOptions.FileMetaInfoOnly) == DicomReadStatus.Success && fs.Position < fs.Length) {
-				return fs;
-			}
-			fs.Close();
-			return null;
-		}
+            _dataset = new DcmDataset(_metainfo.TransferSyntax);
+            dsr.Dataset = _dataset;
+            DicomReadStatus status = dsr.Read(stopTag, options);
+            return status;
+        }
+
+        /// <summary>
+        /// Determine if the file is a DICOM file.
+        /// </summary>
+        /// <param name="file">File to inspect.</param>
+        /// <returns></returns>
+        public static bool IsDicomFile(string file)
+        {
+            bool isDicom = false;
+            using (FileStream fs = File.OpenRead(file))
+            {
+                isDicom = IsDicomStream(fs);
+                fs.Close();
+            }
+            return isDicom;
+        }
+
+        /// <summary>
+        /// Determine if a stream contains a DICOM file.
+        /// </summary>
+        /// <param name="stream">The stream to inspect.</param>
+        /// <returns></returns>
+        public static bool IsDicomStream(Stream stream)
+        {
+            bool isDicom = false;
+            stream.Seek(128, SeekOrigin.Begin);
+            if (stream.ReadByte() == (byte)'D' ||
+                stream.ReadByte() == (byte)'I' ||
+                stream.ReadByte() == (byte)'C' ||
+                stream.ReadByte() == (byte)'M')
+                isDicom = true;
+
+            return isDicom;
+        }
+
+        private static void CheckFileHeader(Stream stream)
+        {
+            if (stream.ReadByte() != (byte)'D' ||
+                stream.ReadByte() != (byte)'I' ||
+                stream.ReadByte() != (byte)'C' ||
+                stream.ReadByte() != (byte)'M')
+            {
+                FileStream fs = stream as FileStream;
+                if (fs != null)
+                {
+                    throw new DicomDataException("Invalid DICOM file: " + fs.Name);
+                }
+                else
+                {
+                    throw new DicomDataException("Invalid DICOM file in stream.");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets file stream starting at DICOM dataset
+        /// </summary>
+        /// <param name="file">Filename</param>
+        /// <returns>File stream</returns>
+        public static FileStream GetDatasetStream(String file)
+        {
+            FileStream fs = File.OpenRead(file);
+            fs.Seek(128, SeekOrigin.Begin);
+            CheckFileHeader(fs);
+            DicomStreamReader dsr = new DicomStreamReader(fs);
+            DcmFileMetaInfo metainfo = new DcmFileMetaInfo();
+            dsr.Dataset = metainfo;
+            if (dsr.Read(DcmFileMetaInfo.StopTag, DicomReadOptions.Default | DicomReadOptions.FileMetaInfoOnly) == DicomReadStatus.Success && fs.Position < fs.Length)
+            {
+                return fs;
+            }
+            fs.Close();
+            return null;
+        }
 
 		/// <summary>
 		/// Saves a DICOM file
 		/// </summary>
 		/// <param name="file">Filename</param>
 		/// <param name="options">DICOM write options</param>
-		public void Save(String file, DicomWriteOptions options) {
-			// expand to full path
-			file = Path.GetFullPath(file);
+        /// <summary>
+        /// Saves a DICOM file to a file
+        /// </summary>
+        /// <param name="file">Filename</param>
+        /// <param name="options">DICOM write options</param>
+        public void Save(String file, DicomWriteOptions options)
+        {
+            // expand to full path
+            file = Path.GetFullPath(file);
 
-			string dir = Path.GetDirectoryName(file);
-			if (!Directory.Exists(dir))
-				Directory.CreateDirectory(dir);
-			using (FileStream fs = File.Create(file)) {
-				fs.Seek(128, SeekOrigin.Begin);
-				fs.WriteByte((byte)'D');
-				fs.WriteByte((byte)'I');
-				fs.WriteByte((byte)'C');
-				fs.WriteByte((byte)'M');
+            string dir = Path.GetDirectoryName(file);
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            using (FileStream fs = File.Create(file))
+            {
+                Save(fs, options);
+                fs.Close();
+            }
+        }
 
-				DicomStreamWriter dsw = new DicomStreamWriter(fs);
-				dsw.Write(_metainfo, options | DicomWriteOptions.CalculateGroupLengths);
-				if (_dataset != null)
-					dsw.Write(_dataset, options);
+        /// <summary>
+        /// Saves a DICOM file to a stream. <br/><i>Note that the caller is expected to dispose of the stream.</i>
+        /// </summary>
+        /// <param name="stream">Stream to place the DICOM file in</param>
+        /// <param name="options">DICOM write options</param>
+        public void Save(Stream stream, DicomWriteOptions options)
+        {
+            stream.Seek(128, SeekOrigin.Begin);
+            stream.WriteByte((byte)'D');
+            stream.WriteByte((byte)'I');
+            stream.WriteByte((byte)'C');
+            stream.WriteByte((byte)'M');
 
-				fs.Close();
-			}
-		}
+            DicomStreamWriter dsw = new DicomStreamWriter(stream);
+            dsw.Write(_metainfo, options | DicomWriteOptions.CalculateGroupLengths);
+            if (_dataset != null)
+                dsw.Write(_dataset, options);
+        }
 	}
 }
