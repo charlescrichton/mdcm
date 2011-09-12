@@ -1,0 +1,37 @@
+The aim of these modifications from the original mDCM is to enable it to run in the SharePoint Sandbox.
+
+You can see a list of SharePoint sandbox restrictions here:
+
+ http://msdn.microsoft.com/en-us/library/ee536577.aspx
+ http://blah.winsmarts.com/2009-12-SharePoint_2010_Sandbox_solutions__Architecture_and_Restrictions.aspx
+
+
+So this involves removing/turning off a lot of the functionality!
+
+Although there are a couple of workarounds/bug fixes to do with IO Streams and XML, and some extra assembly annotations required.
+
+
+Changes
+
+1. Firstly we need to turn off unwanted features:
+
+* Click on the 'Show All Files' icon at the top of the Solution Explorer so we can see the stuff we have turned off. 
+* Right click on the DICOM/Native folder and select 'Unload Projects in Solutions Folder'. 
+* Right click on the following projects and select 'Unload Project'. 
+  * DICOM/Dicom.Codec 
+  * DICOM/Dicom.Codec64 
+  * DICOM/Dicom.Scu 
+  * DICOM/Dicom.Dump
+  * DICOM/Dicom.Tests
+
+* Right click on the following items and select 'Exclude From Project'. 
+  * DICOM/Dicom/HL7 
+  * DICOM/Dicom/Network 
+  * DICOM/Dicom/Utility/LogWriter.cs 
+  * DICOM/Dicom/Utility/SyslogTarget.cs 
+  * DICOM/Dicom/Debug.cs 
+  * DICOM/Dicom.Linq/HL7 
+* Right click on DICOM/Dicom/References/NLog and select 'Remove'. 
+
+Your solution should now have "Solution 'DICOM' (2 projects)" at the top. 
+
