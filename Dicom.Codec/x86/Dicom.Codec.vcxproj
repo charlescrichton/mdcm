@@ -212,15 +212,6 @@
     <ProjectReference Include="..\..\Dicom\Dicom.csproj">
       <Project>{1efc91c4-eef8-4ae4-b512-24c00ca46d59}</Project>
     </ProjectReference>
-    <ProjectReference Include="libijg12.x86.vcxproj">
-      <Project>{8c2a5942-be6b-4667-9849-a402cd71cd77}</Project>
-    </ProjectReference>
-    <ProjectReference Include="libijg16.x86.vcxproj">
-      <Project>{42273f26-df8d-4c81-bd66-ba4617d3eeed}</Project>
-    </ProjectReference>
-    <ProjectReference Include="libijg8.x86.vcxproj">
-      <Project>{ee84732b-eb26-4d43-bb55-b55421ee16c2}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c">

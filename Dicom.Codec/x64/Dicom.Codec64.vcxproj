@@ -79,15 +79,6 @@
     <ProjectReference Include="..\..\Dicom\Dicom.csproj">
       <Project>{1efc91c4-eef8-4ae4-b512-24c00ca46d59}</Project>
     </ProjectReference>
-    <ProjectReference Include="libijg12.x64.vcxproj">
-      <Project>{1b3557d4-1146-428a-aec9-12cadf994527}</Project>
-    </ProjectReference>
-    <ProjectReference Include="libijg16.x64.vcxproj">
-      <Project>{dd846d57-b93b-46c8-bfff-ae4c11e408b3}</Project>
-    </ProjectReference>
-    <ProjectReference Include="libijg8.x64.vcxproj">
-      <Project>{808528f3-15dc-4cc6-a15a-0f91cbdb54e6}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c">
