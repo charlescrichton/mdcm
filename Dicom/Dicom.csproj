@@ -68,11 +68,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Codec\DcmCodecHelper.cs" />
-    <Compile Include="Codec\DicomCodecException.cs" />
-    <Compile Include="Codec\DcmCodecParameters.cs" />
-    <Compile Include="Codec\DicomCodec.cs" />
-    <Compile Include="Codec\DcmRleCodec.cs" />
+    <Compile Include="Codec\DcmCodecHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Codec\DcmCodecParameters.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Codec\DcmRleCodec.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Codec\DicomCodec.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Codec\DicomCodecException.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data\DcmEncoding.cs" />
     <Compile Include="Data\DicomFileScanner.cs" />
     <Compile Include="Data\DicomMatch.cs" />
